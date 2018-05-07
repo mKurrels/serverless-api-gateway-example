@@ -72,7 +72,7 @@ I also used prettier (https://prettier.io/) to format the code.
 
 # Running Locally
 
-(note authorization doesn't work locally)
+(note: authorization doesn't work locally)
 
 To run locally you need to download serverless by running ```npm install -g serverless```
 Then, in this directory run the command ```npm install```
