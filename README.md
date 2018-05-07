@@ -1,8 +1,8 @@
 # Why Serverless Framework
 
-For this project I ended up using the Serverless framework:
-https://serverless.com/
-https://github.com/serverless/serverless
+For this project I ended up using the Serverless framework:  
+https://serverless.com/  
+https://github.com/serverless/serverless  
 
 I chose this framework for two main reasons. It seems to be the most widely adopted (over 20000 stars on github) which comes with all the usual benefits of wide adoption (more examples, more stackoverflow answers, less bugs, more libraries etc). They also work with more than one serverless provider, not just AWS Lambda. So if you would like to switch from Lambda to (say) Google Cloud Functions, you can do so with (presumably) less of a problem than if you chose a framework that was locked in to one provider.
 
