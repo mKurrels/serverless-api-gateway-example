@@ -1,0 +1,72 @@
+service: my-express-application
+
+plugins:
+  - serverless-dynamodb-local
+  - serverless-offline
+
+custom:
+  nodeTableName: 'nodes-table-${self:provider.stage}'
+  projectTableName: 'project-table-${self:provider.stage}'
+  dynamodb:
+    start:
+      migrate: true
+
+provider:
+  name: aws
+  runtime: nodejs6.10
+  stage: dev
+  region: us-east-1
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:BatchWriteItem
+      Resource:
+        - { "Fn::GetAtt": ["NodesDynamoDBTable", "Arn" ] }
+        - { "Fn::GetAtt": ["ProjectsDynamoDBTable", "Arn" ] }
+  environment:
+    NODES_TABLE: ${self:custom.nodeTableName}
+    PROJECTS_TABLE: ${self:custom.projectTableName}
+
+functions:
+  app:
+    handler: index.handler
+    events:
+      - http:
+          path: /
+          method: ANY
+          authorizer: aws_iam
+      - http:
+          path: '{proxy+}'
+          method: ANY
+          authorizer: aws_iam
+
+resources:
+  Resources:
+    NodesDynamoDBTable:
+      Type: 'AWS::DynamoDB::Table'
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: nodeId
+            AttributeType: S
+        KeySchema:
+          - AttributeName: nodeId
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        TableName: ${self:custom.nodeTableName}
+    ProjectsDynamoDBTable:
+      Type: 'AWS::DynamoDB::Table'
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: projectName
+            AttributeType: S
+        KeySchema:
+          - AttributeName: projectName
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        TableName: ${self:custom.projectTableName}
