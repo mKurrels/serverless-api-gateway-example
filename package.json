@@ -13,6 +13,7 @@
     "aws-sdk": "^2.227.1",
     "body-parser": "^1.18.2",
     "express": "^4.16.3",
+    "q": "^1.5.1",
     "serverless-http": "^1.5.5"
   },
   "devDependencies": {

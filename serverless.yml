@@ -1,7 +1,7 @@
 service: my-express-application
 
 plugins:
-  - serverless-dynamodb-local
+#  - serverless-dynamodb-local
   - serverless-offline
 
 custom:
@@ -13,6 +13,8 @@ custom:
 
 provider:
   name: aws
+  apiKeys:
+      - apikey
   runtime: nodejs6.10
   stage: dev
   region: us-east-1
@@ -22,6 +24,8 @@ provider:
         - dynamodb:GetItem
         - dynamodb:PutItem
         - dynamodb:BatchWriteItem
+        - dynamodb:Scan
+        - dynamodb:UpdateItem
       Resource:
         - { "Fn::GetAtt": ["NodesDynamoDBTable", "Arn" ] }
         - { "Fn::GetAtt": ["ProjectsDynamoDBTable", "Arn" ] }
@@ -36,11 +40,11 @@ functions:
       - http:
           path: /
           method: ANY
-          authorizer: aws_iam
+          private: true
       - http:
           path: '{proxy+}'
           method: ANY
-          authorizer: aws_iam
+          private: true
 
 resources:
   Resources:
